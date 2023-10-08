@@ -4,7 +4,9 @@ import static java.util.Locale.ENGLISH;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,7 +104,8 @@ public class TsurugiSqlExecutor implements AutoCloseable {
             try {
                 priority = TransactionPriority.valueOf(s.toUpperCase());
             } catch (Exception e) {
-                var ce = new ConfigException("unsupported tx_priority(" + s + ")");
+                var ce = new ConfigException(MessageFormat.format("Unknown tx_priority ''{0}''. Supported tx_priority are {1}", //
+                        s, Arrays.stream(TransactionPriority.values()).map(TransactionPriority::toString).map(String::toLowerCase).collect(Collectors.joining(", "))));
                 ce.addSuppressed(e);
                 throw ce;
             }

@@ -4,12 +4,15 @@ import static java.util.Locale.ENGLISH;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.embulk.config.ConfigException;
 import org.embulk.input.tsurugidb.TsurugiColumn;
@@ -93,7 +96,8 @@ public class TsurugiKvsExecutor implements AutoCloseable {
             try {
                 priority = Priority.valueOf(s.toUpperCase());
             } catch (Exception e) {
-                var ce = new ConfigException("unsupported tx_priority(" + s + ")");
+                var ce = new ConfigException(MessageFormat.format("Unknown tx_priority ''{0}''. Supported tx_priority are {1}", //
+                        s, Arrays.stream(Priority.values()).map(Priority::toString).map(String::toLowerCase).collect(Collectors.joining(", "))));
                 ce.addSuppressed(e);
                 throw ce;
             }
