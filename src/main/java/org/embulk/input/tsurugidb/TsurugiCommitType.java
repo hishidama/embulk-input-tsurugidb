@@ -46,8 +46,8 @@ public enum TsurugiCommitType {
         try {
             return valueOf(value.toUpperCase(Locale.ENGLISH));
         } catch (Exception e) {
-            var ce = new ConfigException(MessageFormat.format("Unknown insert_method ''{0}''. Supported modes are {1}", //
-                    value, Arrays.stream(values()).map(TsurugiCommitType::toString).collect(Collectors.joining(", "))));
+            var ce = new ConfigException(MessageFormat.format("Unknown commit_type ''{0}''. Supported commit_type are {1}", //
+                    value, Arrays.stream(values()).map(TsurugiCommitType::toString).map(String::toLowerCase).collect(Collectors.joining(", "))));
             ce.addSuppressed(e);
             throw ce;
         }
