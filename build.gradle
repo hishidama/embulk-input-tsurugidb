@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.hishidama.embulk"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tsurugi DB input plugin for Embulk"
 
 java {
