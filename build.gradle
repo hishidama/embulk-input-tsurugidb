@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.hishidama.embulk"
-version = "0.1.1"
+version = "0.1.2"
 description = "Tsurugi DB input plugin for Embulk"
 
 java {
@@ -38,7 +38,7 @@ dependencies {
     compile "org.embulk:embulk-util-timestamp:0.2.2"
     compile "org.embulk:embulk-util-json:0.2.2"
 
-    def tsubakuroVersion = '1.0.1'
+    def tsubakuroVersion = '1.1.0'
     compile "com.tsurugidb.tsubakuro:tsubakuro-connector:${tsubakuroVersion}"
     compile "com.tsurugidb.tsubakuro:tsubakuro-kvs:${tsubakuroVersion}"
 
