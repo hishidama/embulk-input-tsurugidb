@@ -36,6 +36,7 @@ in:
 ## Configuration
 
 * **endpoint**: endpoint for Tsurugi (string, required)
+* **connection_label**: connection label (string, default: `embulk-input-tsurugidb`)
 * **method**: (string, default: `select`)
 * **tx_type**: transaction type (`OCC`, `LTX`, `RTX`) (string, default: `RTX`)
 * **tx_label**: transaction label (string, default: `embulk-input-tsurugidb`)

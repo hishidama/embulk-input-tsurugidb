@@ -57,6 +57,10 @@ public class TsurugiInputPlugin implements InputPlugin {
         @Config("endpoint")
         public String getEndpoint();
 
+        @Config("connection_label")
+        @ConfigDefault("\"embulk-input-tsurugidb\"")
+        public String getConnectionLabel();
+
         @Config("user")
         @ConfigDefault("null")
         public Optional<String> getUser();
