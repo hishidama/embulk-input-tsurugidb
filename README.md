@@ -68,12 +68,12 @@ in:
 
 1. install plugin
    ```
-   $ mvn dependency:get -Dartifact=io.github.hishidama.embulk:embulk-input-tsurugidb:0.1.5
+   $ mvn dependency:get -Dartifact=io.github.hishidama.embulk:embulk-input-tsurugidb:0.1.6
    ```
 
 2. add setting to $HOME/.embulk/embulk.properties
    ```
-   plugins.input.tsurugidb=maven:io.github.hishidama.embulk:tsurugidb:0.1.5
+   plugins.input.tsurugidb=maven:io.github.hishidama.embulk:tsurugidb:0.1.6
    ```
 
 | version       | Tsurugi     | Tsubakuro |
@@ -82,6 +82,7 @@ in:
 | 0.1.2         | 1.0.0-BETA2 | 1.1.0     |
 | 0.1.4         | 1.0.0-BETA3 | 1.2.0     |
 | 0.1.5         | 1.0.0-BETA4 | 1.3.0     |
+| 0.1.6         | 1.0.0-BETA5 | 1.4.0     |
 
 
 ## Build
