@@ -68,7 +68,7 @@ in:
 
 1. install plugin
    ```
-   $ mvn dependency:get -Dartifact=io.github.hishidama.embulk:embulk-input-tsurugidb:0.1.6
+   $ java -jar embulk-0.11.3.jar install io.github.hishidama.embulk:embulk-input-tsurugidb:0.1.6
    ```
 
 2. add setting to $HOME/.embulk/embulk.properties
