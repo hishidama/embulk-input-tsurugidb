@@ -20,6 +20,8 @@ import org.embulk.input.tsurugidb.common.ToStringMap;
 import org.embulk.input.tsurugidb.executor.PreparedQuery;
 import org.embulk.input.tsurugidb.getter.ColumnGetter;
 import org.embulk.input.tsurugidb.getter.ColumnGetterFactory;
+import org.embulk.input.tsurugidb.option.TsurugiCommitType;
+import org.embulk.input.tsurugidb.option.TsurugiSessionShutdownType;
 import org.embulk.input.tsurugidb.select.BatchSelect;
 import org.embulk.input.tsurugidb.select.SelectMethod;
 import org.embulk.spi.BufferAllocator;
@@ -100,6 +102,10 @@ public class TsurugiInputPlugin implements InputPlugin {
         @Config("commit_type")
         @ConfigDefault("\"default\"")
         public TsurugiCommitType getCommitType();
+
+        @Config("session_shutdown_type")
+        @ConfigDefault("\"nothing\"")
+        public TsurugiSessionShutdownType getSessionShutdownType();
 
         @Config("options")
         @ConfigDefault("{}")
@@ -190,6 +196,10 @@ public class TsurugiInputPlugin implements InputPlugin {
         @Config("commit_timeout")
         @ConfigDefault("300")
         public int getCommitTimeout();
+
+        @Config("session_shutdown_timeout")
+        @ConfigDefault("300")
+        public int getSessionShutdownTimeout();
 
         @Config("socket_timeout")
         @ConfigDefault("1800")

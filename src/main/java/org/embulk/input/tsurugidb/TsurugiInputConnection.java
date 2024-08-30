@@ -103,11 +103,19 @@ public class TsurugiInputConnection implements AutoCloseable {
 
     @Override
     public void close() throws ServerException {
-        try (session; var s = sqlExecutor; var k = kvsExecutor) {
-            // close only
+        try (session) {
+            try (var s = sqlExecutor; var k = kvsExecutor) {
+                // close only
+            }
+
+            var shutdownType = task.getSessionShutdownType().toShutdownType();
+            if (shutdownType != null) {
+                int timeout = task.getSessionShutdownTimeout();
+                session.shutdown(shutdownType).await(timeout, TimeUnit.SECONDS);
+            }
         } catch (IOException e) {
             throw new UncheckedIOException(e.getMessage(), e);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | TimeoutException e) {
             throw new RuntimeException(e);
         }
     }

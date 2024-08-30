@@ -45,6 +45,7 @@ in:
 * **tx_exclusive_read_area**: (LTX only) exclusive read area (list of string, defualt: empty list)
 * **tx_priority**: (LTX, RTX only) transaction priority (string, default: `null`)
 * **commit_type**: commit type (string, default: `default`)
+* **session_shutdown_type**: session shutdown type (string, default: `nothing`)
 * if you write SQL directly:
   * **query**: SQL to run (string)
 * if **query** is not set,
@@ -62,6 +63,7 @@ in:
 * **begin_timeout**: timeout for begin transaction (integer (seconds), default: 300)
 * **select_timeout**: timeout for select (integer (seconds), default: 300)
 * **commit_timeout**: timeout for commit (integer (seconds), default: 300)
+* **session_shutdown_timeout**: timeout for commit (integer (seconds), default: 300)
 
 
 ## Install
