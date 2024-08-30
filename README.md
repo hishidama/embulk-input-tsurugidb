@@ -64,7 +64,7 @@ in:
 * **begin_timeout**: timeout for begin transaction (integer (seconds), default: 300)
 * **select_timeout**: timeout for select (integer (seconds), default: 300)
 * **commit_timeout**: timeout for commit (integer (seconds), default: 300)
-* **session_shutdown_timeout**: timeout for commit (integer (seconds), default: 300)
+* **session_shutdown_timeout**: timeout for session shutdown (integer (seconds), default: 300)
 
 
 ## Install
@@ -81,13 +81,13 @@ in:
 
 | version       | Tsurugi     | Tsubakuro |
 |---------------|-------------|-----------|
-| 0.1.0 - 0.1.1 | 1.0.0-BETA1 | 1.0.1     |
-| 0.1.2         | 1.0.0-BETA2 | 1.1.0     |
-| 0.1.4         | 1.0.0-BETA3 | 1.2.0     |
-| 0.1.5         | 1.0.0-BETA4 | 1.3.0     |
-| 0.1.6         | 1.0.0-BETA5 | 1.4.0     |
-| 0.1.7         | 1.0.0-BETA6 | 1.5.0     |
 | 1.0.0         | 1.0.0       | 1.6.0     |
+| 0.1.7         | 1.0.0-BETA6 | 1.5.0     |
+| 0.1.6         | 1.0.0-BETA5 | 1.4.0     |
+| 0.1.5         | 1.0.0-BETA4 | 1.3.0     |
+| 0.1.4         | 1.0.0-BETA3 | 1.2.0     |
+| 0.1.2         | 1.0.0-BETA2 | 1.1.0     |
+| 0.1.0 - 0.1.1 | 1.0.0-BETA1 | 1.0.1     |
 
 
 ## Build
