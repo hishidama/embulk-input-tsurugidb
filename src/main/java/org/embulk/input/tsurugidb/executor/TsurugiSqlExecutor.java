@@ -245,15 +245,10 @@ public class TsurugiSqlExecutor implements AutoCloseable {
             if (name.isEmpty()) {
                 name = "@#" + i;
             }
-            // TODO Tsurugi get metadata
-//          String typeName = metadata.getColumnTypeName(index);
-            String typeName = "";
-//          int sqlType = metadata.getColumnType(index);
+            String typeName = TsurugiColumn.getTypeName(column);
             AtomType sqlType = column.getAtomType();
-//          int scale = metadata.getScale(index);
-            int scale = 15;
-//          int precision = metadata.getPrecision(index);
-            int precision = 0;
+            int precision = TsurugiColumn.getPrecisionAsInt(column);
+            int scale = TsurugiColumn.getScaleAsInt(column);
             columns.add(new TsurugiColumn(name, typeName, sqlType, precision, scale));
 
             i++;

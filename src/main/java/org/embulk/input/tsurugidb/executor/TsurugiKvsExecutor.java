@@ -86,7 +86,7 @@ public class TsurugiKvsExecutor implements AutoCloseable {
             throw new ConfigException("unsupported tx_type(" + txType + "). choose from OCC,LTX,RTX");
         }
 
-//TODO Tsurugi        builder.withLabel(task.getTxLabel());
+//TODO Tsurugi KVS        builder.withLabel(task.getTxLabel());
         return builder.build();
     }
 
@@ -171,15 +171,10 @@ public class TsurugiKvsExecutor implements AutoCloseable {
         final var columns = new ArrayList<TsurugiColumn>(metadataColumns.size());
         for (var column : metadataColumns) {
             String name = column.getName();
-            // TODO Tsurugi get metadata
-//          String typeName = metadata.getColumnTypeName(index);
-            String typeName = "";
-//          int sqlType = metadata.getColumnType(index);
+            String typeName = TsurugiColumn.getTypeName(column);
             AtomType sqlType = column.getAtomType();
-//          int scale = metadata.getScale(index);
-            int scale = 15;
-//          int precision = metadata.getPrecision(index);
-            int precision = 0;
+            int precision = TsurugiColumn.getPrecisionAsInt(column);
+            int scale = TsurugiColumn.getScaleAsInt(column);
             columns.add(new TsurugiColumn(name, typeName, sqlType, precision, scale));
         }
 
