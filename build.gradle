@@ -1,8 +1,7 @@
 plugins {
     id "java-library"
-    id "org.embulk.embulk-plugins" version "0.5.5"
-    id "maven-publish"
-    id "signing"
+    id "org.embulk.embulk-plugins" version "0.7.0"
+    id "com.vanniktech.maven.publish" version "0.33.0"
 }
 
 group = "io.github.hishidama.embulk"
@@ -34,19 +33,17 @@ embulkPlugin {
 dependencies {
     compileOnly "org.embulk:embulk-api:0.10.43"
     compileOnly "org.embulk:embulk-spi:0.11"
-    compile "org.embulk:embulk-util-config:0.3.4"
-    compile "org.embulk:embulk-util-timestamp:0.2.2"
-    compile "org.embulk:embulk-util-json:0.2.2"
+    implementation "org.embulk:embulk-util-config:0.3.4"
+    implementation "org.embulk:embulk-util-timestamp:0.2.2"
+    implementation "org.embulk:embulk-util-json:0.2.2"
 
     def tsubakuroVersion = '1.10.0'
-    compile "com.tsurugidb.tsubakuro:tsubakuro-connector:${tsubakuroVersion}"
-    compile "com.tsurugidb.tsubakuro:tsubakuro-kvs:${tsubakuroVersion}"
+    implementation "com.tsurugidb.tsubakuro:tsubakuro-connector:${tsubakuroVersion}"
+    implementation "com.tsurugidb.tsubakuro:tsubakuro-kvs:${tsubakuroVersion}"
 
-    // compile "YOUR_JAR_DEPENDENCY_GROUP:YOUR_JAR_DEPENDENCY_MODULE:YOUR_JAR_DEPENDENCY_VERSION"
-
-    testCompile "org.embulk:embulk-deps:0.11.0"
-    testCompile "org.embulk:embulk-junit4:0.11.0"
-    testCompile "io.github.hishidama.embulk:hm-embulk-tester:0.1.+"
+    testImplementation "org.embulk:embulk-deps:0.11.0"
+    testImplementation "org.embulk:embulk-junit4:0.11.0"
+    testImplementation "io.github.hishidama.embulk:hm-embulk-tester:0.1.+"
     testImplementation "ch.qos.logback:logback-classic:1.4.14"
 }
 
@@ -54,47 +51,35 @@ test {
     systemProperty "endpoint", findProperty("endpoint")
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId = 'embulk-input-tsurugidb'
-            from components.java
+import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
 
-            pom {
-                name = 'Tsurugi DB input plugin for Embulk'
-                description = 'Selects records from a table.'
-                url = 'https://github.com/hishidama/embulk-input-tsurugidb'
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'http://www.opensource.org/licenses/mit-license.php'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'hishidama'
-                    }
-                }
-                scm {
-                    connection = 'git@github.com:hishidama/embulk-input-tsurugidb.git'
-                    developerConnection = 'git@github.com:hishidama/embulk-input-tsurugidb.git'
-                    url = 'https://github.com/hishidama/embulk-input-tsurugidb'
-                }
+mavenPublishing {
+    configure(new JavaLibrary(new JavadocJar.None(), true))
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+
+    pom {
+        name = 'Tsurugi DB input plugin for Embulk'
+        description = 'Selects records from a table.'
+        url = 'https://github.com/hishidama/embulk-input-tsurugidb'
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'http://www.opensource.org/licenses/mit-license.php'
             }
         }
-    }
-    repositories {
-        maven {
-            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username findProperty('sonatypeUsername')
-                password findProperty('sonatypePassword')
+        developers {
+            developer {
+                id = 'hishidama'
             }
         }
+        scm {
+            connection = 'git@github.com:hishidama/embulk-input-tsurugidb.git'
+            developerConnection = 'git@github.com:hishidama/embulk-input-tsurugidb.git'
+            url = 'https://github.com/hishidama/embulk-input-tsurugidb'
+        }
     }
-}
-
-signing {
-    required { gradle.taskGraph.hasTask("publishMavenJavaPublicationToMavenRepository") }
-    sign publishing.publications.mavenJava
 }
