@@ -69,6 +69,7 @@ public class SessionKeepAliveTest extends TsurugiTestTool {
             var in = tester.newConfigSource("in");
             in.set("type", TsurugiInputPlugin.TYPE);
             in.set("endpoint", ENDPOINT);
+            setCredential(in);
             in.set("table", TEST);
             if (keepAlive != null) {
                 in.set("session_keep_alive", keepAlive.toString());

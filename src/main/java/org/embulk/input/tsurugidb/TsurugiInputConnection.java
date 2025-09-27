@@ -2,6 +2,7 @@ package org.embulk.input.tsurugidb;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tsurugidb.tsubakuro.channel.common.connection.Credential;
+import com.tsurugidb.tsubakuro.channel.common.connection.FileCredential;
 import com.tsurugidb.tsubakuro.channel.common.connection.NullCredential;
+import com.tsurugidb.tsubakuro.channel.common.connection.RememberMeCredential;
 import com.tsurugidb.tsubakuro.channel.common.connection.UsernamePasswordCredential;
 import com.tsurugidb.tsubakuro.common.Session;
 import com.tsurugidb.tsubakuro.common.SessionBuilder;
@@ -57,6 +60,20 @@ public class TsurugiInputConnection implements AutoCloseable {
         if (user.isPresent()) {
             String password = task.getPassword().orElse(null);
             return new UsernamePasswordCredential(user.get(), password);
+        }
+
+        Optional<String> token = task.getAuthToken();
+        if (token.isPresent()) {
+            return new RememberMeCredential(token.get());
+        }
+
+        Optional<String> credentials = task.getCredentials();
+        if (credentials.isPresent()) {
+            try {
+                return FileCredential.load(Path.of(credentials.get()));
+            } catch (IOException e) {
+                throw new UncheckedIOException(e.getMessage(), e);
+            }
         }
 
         return NullCredential.INSTANCE;

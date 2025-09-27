@@ -24,7 +24,7 @@ public class ToString {
         } else if (node.isValueNode()) {
             this.string = node.toString();
         } else {
-            throw new JsonMappingException(String.format("Arrays and objects are invalid: '%s'", node));
+            throw new JsonMappingException(null, String.format("Arrays and objects are invalid: '%s'", node));
         }
     }
 

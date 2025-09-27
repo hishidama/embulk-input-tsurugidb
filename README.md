@@ -36,6 +36,11 @@ in:
 ## Configuration
 
 * **endpoint**: endpoint for Tsurugi (string, required)
+* credential - one of user/password, auth_token, credentials
+  * **user**: user
+  * **password**: password
+  * **auth_token**: auth token
+  * **credentials**: credential file path
 * **connection_label**: connection label (string, default: `embulk-input-tsurugidb`)
 * **method**: (string, default: `select`)
 * **tx_type**: transaction type (`OCC`, `LTX`, `RTX`) (string, default: `RTX`)
@@ -71,12 +76,12 @@ in:
 
 1. install plugin
    ```
-   $ java -jar embulk-0.11.3.jar install io.github.hishidama.embulk:embulk-input-tsurugidb:1.5.0
+   $ java -jar embulk-0.11.3.jar install io.github.hishidama.embulk:embulk-input-tsurugidb:1.6.0
    ```
 
 2. add setting to $HOME/.embulk/embulk.properties
    ```
-   plugins.input.tsurugidb=maven:io.github.hishidama.embulk:tsurugidb:1.5.0
+   plugins.input.tsurugidb=maven:io.github.hishidama.embulk:tsurugidb:1.6.0
    ```
 
 | version       | Tsurugi       | Tsubakuro |
@@ -86,6 +91,7 @@ in:
 | 1.3.0         | 1.3.0         | 1.8.0     |
 | 1.4.0         | 1.4.0         | 1.9.0     |
 | 1.5.0         | 1.5.0         | 1.10.0    |
+| 1.6.0         | 1.6.0         | 1.11.0    |
 
 
 ## Build

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.hishidama.embulk"
-version = "1.5.0"
+version = "1.6.0"
 description = "Tsurugi DB input plugin for Embulk"
 
 java {
@@ -37,9 +37,14 @@ dependencies {
     implementation "org.embulk:embulk-util-timestamp:0.2.2"
     implementation "org.embulk:embulk-util-json:0.2.2"
 
-    def tsubakuroVersion = '1.10.0'
+    def tsubakuroVersion = '1.11.0'
     implementation "com.tsurugidb.tsubakuro:tsubakuro-connector:${tsubakuroVersion}"
     implementation "com.tsurugidb.tsubakuro:tsubakuro-kvs:${tsubakuroVersion}"
+
+    implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.3"))
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.core:jackson-annotations")
+    implementation("com.fasterxml.jackson.core:jackson-core")
 
     testImplementation "org.embulk:embulk-deps:0.11.0"
     testImplementation "org.embulk:embulk-junit4:0.11.0"

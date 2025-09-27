@@ -2,10 +2,13 @@ package org.embulk.input.tsurugidb;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.embulk.config.ConfigSource;
 import org.junit.AfterClass;
 import org.junit.AssumptionViolatedException;
 
@@ -15,6 +18,10 @@ import com.tsurugidb.sql.proto.SqlRequest.Parameter;
 import com.tsurugidb.sql.proto.SqlRequest.Placeholder;
 import com.tsurugidb.sql.proto.SqlRequest.TransactionOption;
 import com.tsurugidb.sql.proto.SqlRequest.TransactionType;
+import com.tsurugidb.tsubakuro.channel.common.connection.Credential;
+import com.tsurugidb.tsubakuro.channel.common.connection.FileCredential;
+import com.tsurugidb.tsubakuro.channel.common.connection.RememberMeCredential;
+import com.tsurugidb.tsubakuro.channel.common.connection.UsernamePasswordCredential;
 import com.tsurugidb.tsubakuro.common.Session;
 import com.tsurugidb.tsubakuro.common.SessionBuilder;
 import com.tsurugidb.tsubakuro.exception.ServerException;
@@ -32,13 +39,117 @@ public class TsurugiTestTool {
 
     public static final String ENDPOINT;
     static {
-        String endpoint = System.getProperty("endpoint");
-        if (endpoint == null || endpoint.isEmpty()) {
+        String endpoint = getSystemProperty("endpoint");
+        if (endpoint == null) {
             endpoint = "tcp://localhost:12345";
         } else if (endpoint.equalsIgnoreCase("skip")) {
             endpoint = null;
         }
         ENDPOINT = endpoint;
+    }
+
+    private static Credential CREDENTIAL;
+
+    public static Credential getCredential() {
+        if (CREDENTIAL == null) {
+            CREDENTIAL = createCredential();
+        }
+        return CREDENTIAL;
+    }
+
+    private static Credential createCredential() {
+        String user = getSystemProperty("user");
+        if (user != null) {
+            String password = getSystemProperty("password");
+            return new UsernamePasswordCredential(user, password);
+        }
+
+        String token = getSystemProperty("authToken");
+        if (token != null) {
+            return new RememberMeCredential(token);
+        }
+
+        String credentials = getSystemProperty("credentials");
+        if (credentials != null) {
+            try {
+                return FileCredential.load(Path.of(credentials));
+            } catch (IOException e) {
+                throw new UncheckedIOException(e.getMessage(), e);
+            }
+        }
+
+        token = getEnv("TSURUGI_AUTH_TOKEN");
+        if (token != null) {
+            return new RememberMeCredential(token);
+        }
+
+        var pathOpt = FileCredential.DEFAULT_CREDENTIAL_PATH;
+        if (pathOpt.isPresent()) {
+            Path path = pathOpt.get();
+            if (Files.exists(path)) {
+                try {
+                    return FileCredential.load(path);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e.getMessage(), e);
+                }
+            }
+        }
+
+        return new UsernamePasswordCredential("tsurugi", "password");
+    }
+
+    protected static void setCredential(ConfigSource in) {
+        String user = getSystemProperty("user");
+        if (user != null) {
+            in.set("user", user);
+            in.set("password", getSystemProperty("password"));
+            return;
+        }
+
+        String token = getSystemProperty("authToken");
+        if (token != null) {
+            in.set("auth_token", token);
+            return;
+        }
+
+        String credentials = getSystemProperty("credentials");
+        if (credentials != null) {
+            in.set("credentials", credentials);
+            return;
+        }
+
+        token = getEnv("TSURUGI_AUTH_TOKEN");
+        if (token != null) {
+            in.set("auth_token", token);
+            return;
+        }
+
+        var pathOpt = FileCredential.DEFAULT_CREDENTIAL_PATH;
+        if (pathOpt.isPresent()) {
+            Path path = pathOpt.get();
+            if (Files.exists(path)) {
+                in.set("credentials", path.toString());
+            }
+        }
+
+        in.set("user", "tsurugi");
+        in.set("password", "password");
+    }
+
+    private static String getSystemProperty(String key) {
+        String value = System.getProperty(key);
+        if (value != null && value.isEmpty()) {
+            return null;
+        }
+        return value;
+    }
+
+    private static String getEnv(String key) {
+        String value = System.getenv(key);
+        if (value != null && value.isEmpty()) {
+            return null;
+        }
+        return value;
     }
 
     private static final long TIMEOUT = 10;
@@ -70,6 +181,7 @@ public class TsurugiTestTool {
             }
             try {
                 staticSession = SessionBuilder.connect(ENDPOINT) //
+                        .withCredential(getCredential()) //
                         .withApplicationName("embulk-input-tsurugidb.test") //
                         .withLabel("embulk-input-tsurugidb.test.static-session") //
                         .create(TIMEOUT, TIMEOUT_UNIT);

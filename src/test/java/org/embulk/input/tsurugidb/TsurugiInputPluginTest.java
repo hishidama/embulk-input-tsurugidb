@@ -62,6 +62,7 @@ public class TsurugiInputPluginTest extends TsurugiTestTool {
             var in = tester.newConfigSource("in");
             in.set("type", TsurugiInputPlugin.TYPE);
             in.set("endpoint", ENDPOINT);
+            setCredential(in);
             in.set("query", "select * from " + TEST + " order by pk");
 
             List<OutputRecord> result = tester.runInput(in);
@@ -87,6 +88,7 @@ public class TsurugiInputPluginTest extends TsurugiTestTool {
             var in = tester.newConfigSource("in");
             in.set("type", TsurugiInputPlugin.TYPE);
             in.set("endpoint", ENDPOINT);
+            setCredential(in);
             in.set("table", TEST);
             in.set("where", "pk < " + size);
             in.set("order_by", "long_value");
@@ -112,6 +114,7 @@ public class TsurugiInputPluginTest extends TsurugiTestTool {
             var in = tester.newConfigSource("in");
             in.set("type", TsurugiInputPlugin.TYPE);
             in.set("endpoint", ENDPOINT);
+            setCredential(in);
             in.set("query", "select count(*), max(long_value) from " + TEST);
 
             List<OutputRecord> result = tester.runInput(in);
@@ -133,6 +136,7 @@ public class TsurugiInputPluginTest extends TsurugiTestTool {
             var in = tester.newConfigSource("in");
             in.set("type", TsurugiInputPlugin.TYPE);
             in.set("endpoint", ENDPOINT);
+            setCredential(in);
             in.set("table", TEST);
             in.set("method", "scan");
 
@@ -160,6 +164,7 @@ public class TsurugiInputPluginTest extends TsurugiTestTool {
             var in = tester.newConfigSource("in");
             in.set("type", TsurugiInputPlugin.TYPE);
             in.set("endpoint", ENDPOINT);
+            setCredential(in);
             in.set("table", TEST);
             in.set("method", "scan");
             in.set("tx_type", "OCC");
