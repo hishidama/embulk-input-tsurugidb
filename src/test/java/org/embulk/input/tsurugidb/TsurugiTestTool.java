@@ -271,7 +271,7 @@ public class TsurugiTestTool {
         var option = TransactionOption.newBuilder().setType(txType).build();
         try (var transaction = createTransaction(sqlClient, option)) {
             action.execute(sqlClient, transaction);
-            transaction.commit(CommitStatus.COMMIT_STATUS_UNSPECIFIED);
+            transaction.commit(CommitStatus.COMMIT_STATUS_UNSPECIFIED).await(TIMEOUT, TIMEOUT_UNIT);
         } catch (IOException e) {
             throw new UncheckedIOException(e.getMessage(), e);
         } catch (CcException e) {
